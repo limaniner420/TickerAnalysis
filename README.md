@@ -14,7 +14,7 @@ IEX Cloud Terms of Service: https://iexcloud.io/terms/
 
 ## TL;DR
 
-Don't blame it on us if you lose your pension to SPY puts or whatever.
+Don't blame it on us if you lose your savings to SPY puts or whatever.
 
 ## Disclaimer
 
@@ -25,6 +25,8 @@ The authors bear no responsibility of any profit or loss incurred by the user ba
 ## Copyright & Licence
 
 Copyright 2022 Eric Chen, Shao-en Hung Lawrence and Jun Pin Foo.
+
+This project or parts thereof can not be copied and/or redistributed without express permission by the authors.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
