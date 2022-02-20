@@ -2,7 +2,7 @@ api/template
 test.py
 *.json
 *.cfg
-
+.gitignore
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
