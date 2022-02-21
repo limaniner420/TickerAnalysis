@@ -4,11 +4,11 @@ This software attempts to provide summary data of a particular stock ticker to a
 
 # Functionality
 
-### Recommendation by Moving Average
+### Moving Average Comparison
 
 Measure ticker performance and gives a buy/sell/hold suggestion based on moving averages of its historical price.
 
-### Comparison against S&P 500
+### S&P 500 Comparison
 
 Measure ticker performance relative to S&P 500 with use of inferential statistics.
 
