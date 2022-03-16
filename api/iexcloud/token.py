@@ -9,4 +9,4 @@ def get_token():
     """
     config = configparser.ConfigParser()
     config.read_file(open(os.path.join(os.getcwd(), "config.cfg")))
-    return config.get('token', 'token')
+    return config.get('token', 'token_IEX')
