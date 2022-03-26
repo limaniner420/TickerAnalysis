@@ -1,28 +1,6 @@
 import pandas as pd
 import numpy as np
 
-# def sma(data: pd.DataFrame, **kwargs):
-#     """ 
-#     Returns simple moving average.
-#     """
-#     if("window" not in kwargs):
-#         kwargs.update({"window": 20})
-#     return data.rolling(**kwargs).mean()
-
-# def ema(data: pd.DataFrame, **kwargs):
-#     """ 
-#     Returns exponential moving average.
-#     """
-#     return data.ewm(**kwargs).mean()
-
-# def rollingStd(data: pd.DataFrame, **kwargs):
-#     """ 
-#     Returns rolling standard deviation.
-#     """
-#     if("window" not in kwargs):
-#         kwargs.update({"window": 20})
-#     return data.rolling(**kwargs).std()
-
 def bollingerBands(data: pd.DataFrame, t: int = 20):
     """ 
     Uses historical price data to determine bollinger bands and moving average.
@@ -37,11 +15,9 @@ def bollingerBands(data: pd.DataFrame, t: int = 20):
 
     bollinger = pd.DataFrame()
     bollinger["date"] = data["date"]
-    bollinger["TP"] = np.true_divide((data["high"] + data["low"] + data["close"]),3)
+    bollinger["TP"] = np.true_divide((data["high"] + data["low"] + data["close"]), 3)
 
-    # bollinger["MA"] = sma(bollinger["TP"], window = t)
     bollinger["MA"] = bollinger["TP"].rolling(window = t).mean()
-    # bollinger["sd"] = rollingStd(bollinger["TP"], window = t)
     bollinger["sd"] = bollinger["TP"].rolling(window = t).std()
     bollinger["-2sd"] = bollinger["MA"] - 2*bollinger["sd"]
     bollinger["-1sd"] = bollinger["MA"] - bollinger["sd"]
@@ -51,7 +27,7 @@ def bollingerBands(data: pd.DataFrame, t: int = 20):
     bollinger = bollinger.set_index("date").dropna()
     return bollinger
     
-def macd(data: pd.DataFrame, t: int = 9):
+def macd(data: pd.DataFrame, t_macd: int = 9, t_fast = 12, t_slow = 26):
     """ 
     Uses historical price to calculate MACD indicator.
     data: pandas Dataframe containing historical price data. Requires columns "date", "close". 
@@ -64,8 +40,8 @@ def macd(data: pd.DataFrame, t: int = 9):
     data = data[["date", "close"]]
     macd = pd.DataFrame()
     macd["date"] = data["date"]
-    macd["MACD"] = data["close"].ewm(span = 12, adjust = False, min_periods = 12).mean() - data["close"].ewm(span = 26, adjust = False, min_periods = 26).mean()
-    macd["trigger"] = macd["MACD"].ewm(span = t, adjust = False, min_periods = t).mean()
+    macd["MACD"] = data["close"].ewm(span = t_fast, adjust = False, min_periods = t_fast).mean() - data["close"].ewm(span = t_slow, adjust = False, min_periods = t_slow).mean()
+    macd["trigger"] = macd["MACD"].ewm(span = t_macd, adjust = False, min_periods = t_macd).mean()
     macd["delta"] = np.subtract(macd["MACD"], macd["trigger"])
     macd = macd.set_index("date").dropna()
     return macd
