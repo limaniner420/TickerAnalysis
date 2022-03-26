@@ -64,3 +64,6 @@ def batch(symbols: list[str], types: list[str], range: str = None, params_ex: di
 
     r.raise_for_status()
     return r.json()
+
+def test():
+    return None
