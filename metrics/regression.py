@@ -27,7 +27,7 @@ def bollingerBands(data: pd.DataFrame, t: int = 20):
     """ 
     Uses historical price data to determine bollinger bands and moving average.
     data: pandas Dataframe containing historical price data. Requires columns "date", "high", "low", "close".
-    t: Time periods used for calculating rolling statistics.
+    t: Time periods used to calculating rolling statistics.
 
     Returns a Dataframe containing Bollinger bands (2 std.) and Moving average data points for each time period.
 
@@ -53,8 +53,13 @@ def bollingerBands(data: pd.DataFrame, t: int = 20):
     
 def macd(data: pd.DataFrame, t: int = 9):
     """ 
-    Uses historical price 
-    https://www.investopedia.com/terms/b/bollingerbands.asp
+    Uses historical price to calculate MACD indicator.
+    data: pandas Dataframe containing historical price data. Requires columns "date", "close". 
+    t: Time periods used to calculate MACD trigger line.
+
+    Returns a Dataframe containing MACD values, trigger line and their difference.
+
+    See: https://www.investopedia.com/terms/b/bollingerbands.asp
     """
     data = data[["date", "close"]]
     macd = pd.DataFrame()
