@@ -10,4 +10,6 @@ with open('data.json', 'w') as f:
     json.dump(j, f)
 
 hist = pd.json_normalize(j)
-print(hist)
+print(hist) #added for test
+
+
