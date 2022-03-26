@@ -14,9 +14,15 @@ Measure ticker performance relative to S&P 500 with use of inferential statistic
 
 ### Sentiment
 
-Shows market sentiment of ticker among Twitter users.
+Shows market sentiment based on current news.
 
-The
+### Regression studies
+
+Uses common regression algorithms to predict near future price trends.
+
+### Candlestick patterns
+
+Prediction based on recent price data to predict near future price trends.
 
 # Legalese
 
