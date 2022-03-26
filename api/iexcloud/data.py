@@ -64,17 +64,3 @@ def batch(symbols: list[str], types: list[str], range: str = None, params_ex: di
 
     r.raise_for_status()
     return r.json()
-
-def news(symbol: str, range: str, mode: str = "sandbox", ver: str = "stable"):
-    """ 
-    symbol: Symbol of listed securities on NA exchanges.
-    range: Desired range of data in calendar days.
-    mode: Specify whether to access sandbox ("sandbox") data or real ("cloud") data. Polling real data may incur charges. Default sandbox.
-    ver: Specify api version. Default stable.
-    """
-    
-    url_final = url.compose_URL("/stock/{0}/news/{1}".format(symbol, range), mode = mode, ver = ver)
-    r = req.get(url = url_final)
-
-    r.raise_for_status()
-    return r.json()
