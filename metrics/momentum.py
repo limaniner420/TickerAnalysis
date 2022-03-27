@@ -15,7 +15,7 @@ def bollingerBands(data: pd.DataFrame, t: int = 20):
 
     bollinger = pd.DataFrame()
     bollinger["date"] = data["date"]
-    bollinger["TP"] = np.true_divide((data["high"] + data["low"] + data["close"]), 3)
+    bollinger["TP"] = np.true_divide((data["high"] + data["low"] + data["close"]), 3) # Typical price = (high + low + close) / 3
 
     bollinger["MA"] = bollinger["TP"].rolling(window = t).mean()
     bollinger["sd"] = bollinger["TP"].rolling(window = t).std()
@@ -31,11 +31,13 @@ def macd(data: pd.DataFrame, t_macd: int = 9, t_fast = 12, t_slow = 26):
     """ 
     Uses historical price to calculate MACD indicator.
     data: pandas Dataframe containing historical price data. Requires columns "date", "close". 
-    t: Time periods used to calculate MACD trigger line.
+    t_macd: Time periods used to calculate MACD trigger line.
+    t_fast: Time periods used to calculate fast exponential-weighted average.
+    t_slow: Time periods used to calculate slow exponential-weighted average.
 
     Returns a Dataframe containing MACD values, trigger line and their difference.
 
-    See: https://www.investopedia.com/terms/b/bollingerbands.asp
+    See: https://www.investopedia.com/terms/m/macd.asp
     """
     data = data[["date", "close"]]
     macd = pd.DataFrame()
@@ -45,3 +47,6 @@ def macd(data: pd.DataFrame, t_macd: int = 9, t_fast = 12, t_slow = 26):
     macd["delta"] = np.subtract(macd["MACD"], macd["trigger"])
     macd = macd.set_index("date").dropna()
     return macd
+
+def rsi(data: pd.DataFrame, t: int = 14):
+    return
