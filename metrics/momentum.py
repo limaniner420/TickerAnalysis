@@ -69,3 +69,14 @@ def rsi(data: pd.DataFrame, t_periods: int = 14):
     rsi = rsi.iloc[14:]
     rsi = rsi.set_index("date").dropna()
     return rsi['RSI']
+
+def volatility(data: pd.DataFrame):
+    """"
+    Uses historical price to calcuate volatility
+    data: pandas Dataframe containing historical price data. Requires columns "date", "close".
+    Returns a volatility value during the corresponding period
+    """
+    data = np.log(data['close']/data['close'].shift(1))
+    data = data.fillna(0)
+    volatility = data.rolling(window=len(data)).std()*np.sqrt(len(data))
+    return volatility.iloc[len(data)-1]
