@@ -48,5 +48,24 @@ def macd(data: pd.DataFrame, t_macd: int = 9, t_fast = 12, t_slow = 26):
     macd = macd.set_index("date").dropna()
     return macd
 
-def rsi(data: pd.DataFrame, t: int = 14):
-    return
+def rsi(data: pd.DataFrame, t_periods: int = 14):
+    """
+    Uses historical price to calcuate the relative strength index
+    data: pandas Dataframe containing historical price data. Requires columns "date", "close".
+    periods: required time to calculate the rsi
+    Returns a Dataframe with the relative strength index and corresponding date
+    """
+    delta = data['close'].diff()
+    rsi = pd.DataFrame()
+    rsi['date'] = data['date']
+    rsi['gain'] = delta.clip(lower=0) 
+    rsi['loss'] = -1*delta.clip(upper=0)
+    gain_ema = rsi['gain'].ewm(com=t_periods-1, adjust=False,min_periods=t_periods).mean()
+    loss_ema = rsi['loss'].ewm(com=t_periods-1, adjust=False,min_periods=t_periods).mean()
+    rs = gain_ema/loss_ema
+
+    rsi['RSI'] = 100 - (100/(1 + rs))
+    #skil first 14 days
+    rsi = rsi.iloc[14:]
+    rsi = rsi.set_index("date").dropna()
+    return rsi['RSI']
