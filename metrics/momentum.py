@@ -87,8 +87,9 @@ def Stochastic(data: pd.DataFrame):
     """
     Oscillator = pd.DataFrame()
     Oscillator['date'] = data['date']
-    Oscillator['max'] = data['close'].rolling(15).max()
-    Oscillator['min'] = data['close'].rolling(15).min()
+    Oscillator['close'] = data['close']
+    Oscillator['max'] = data['high'].rolling(14).max()
+    Oscillator['min'] = data['low'].rolling(14).min()
     Oscillator['K'] = (data['close']-Oscillator['min'])*100/(Oscillator['max'] - Oscillator['min'])
     Oscillator['D'] = Oscillator['K'].rolling(3).mean()
     Oscillator = Oscillator.set_index("date").dropna()
