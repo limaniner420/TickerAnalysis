@@ -65,8 +65,6 @@ def rsi(data: pd.DataFrame, t_periods: int = 14):
     rs = gain_ema/loss_ema
 
     rsi['RSI'] = 100 - (100/(1 + rs))
-    #skil first 14 days
-    rsi = rsi.iloc[14:]
     rsi = rsi.set_index("date").dropna()
     return rsi['RSI']
 
