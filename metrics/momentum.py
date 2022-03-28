@@ -80,3 +80,18 @@ def volatility(data: pd.DataFrame):
     data = data.fillna(0)
     volatility = data.rolling(window=len(data)).std()*np.sqrt(len(data))
     return volatility.iloc[len(data)-1]
+
+def Stochastic(data: pd.DataFrame):
+    """
+    Uses historical price to calculate %K and %D
+    data: pandas Dataframe containing historical price data. Requires columns "date", "close".
+    https://www.investopedia.com/terms/s/stochasticoscillator.asp
+    """
+    Oscillator = pd.DataFrame()
+    Oscillator['date'] = data['date']
+    Oscillator['max'] = data['close'].rolling(15).max()
+    Oscillator['min'] = data['close'].rolling(15).min()
+    Oscillator['K'] = (data['close']-Oscillator['min'])*100/(Oscillator['max'] - Oscillator['min'])
+    Oscillator['D'] = Oscillator['K'].rolling(3).mean()
+    Oscillator = Oscillator.set_index("date").dropna()
+    return Oscillator
