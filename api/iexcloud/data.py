@@ -65,7 +65,7 @@ def batch(symbols: list[str], types: list[str], range: str = None, params_ex: di
     r.raise_for_status()
     return r.json()
 
-def news(symbol: str, range: str, mode: str = "sandbox", ver: str = "stable"):
+def news(symbol: str, range: str, mode: str = "sandbox", ver: str = "stable"): #sandbox / cloud
     """ 
     symbol: Symbol of listed securities on NA exchanges.
     range: Desired range of data in calendar days.
@@ -73,7 +73,7 @@ def news(symbol: str, range: str, mode: str = "sandbox", ver: str = "stable"):
     ver: Specify api version. Default stable.
     """
     
-    url_final = url.compose_URL("/stock/{0}/news/{1}".format(symbol, range), mode = mode, ver = ver)
+    url_final = url.compose_URL("/stock/{0}/news/last/{1}".format(symbol, range), mode = mode, ver = ver)
     r = req.get(url = url_final)
 
     r.raise_for_status()
