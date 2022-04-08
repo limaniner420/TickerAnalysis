@@ -45,7 +45,6 @@ print(weight)
 
 #rsi
 rsi = metum.rsi(data)
-print(rsi)
 mean = rsi['RSI'].rolling(len(rsi)).mean().iloc[-1]
 if(rsi.iloc[-1]['RSI'] == mean):
     weight += 0
