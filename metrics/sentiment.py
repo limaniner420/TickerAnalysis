@@ -19,26 +19,26 @@ def changingSpecialChar(data):
 
 def sentimentAnalysis(data: json, t_int: int = 50):
     """ 
+    Uses intraday news data provided by iexcloud to provide a sentiment analysis on the specified stock ticker
     data: json input of News data (IEX).
-    t_int: specified for amount of recent news
-    returns a sentiment score gathered from analyzing recent news
+    t_int: specified for amount of recent news (max/default 50)
+    Ruturns an overall sentiment score by averaging all the articles.
     """
 
-
-    hist = pd.json_normalize(data)
+    newsData = pd.json_normalize(data)
     stemmer = PorterStemmer()
     lemmatizer = WordNetLemmatizer()
-    hist = hist.drop(columns=['datetime', 'source', 'url', 'lang', 'hasPaywall', 'related', 'image'])
+    newsData = newsData.drop(columns=['datetime', 'source', 'url', 'lang', 'hasPaywall', 'related', 'image'])
 
-    hist['headline'] = hist['headline'].apply(lambda x: " ".join(x.lower() for x in x.split()))
-    hist['headline'] = hist['headline'].apply(changingSpecialChar)
-    hist['headline'] = hist['headline'].apply(lambda x: " ".join([stemmer.stem(word) for word in x.split()]))
-    hist['headline'] = hist['headline'].apply(lambda x: " ".join([lemmatizer.lemmatize(word, pos="v") for word in x.split()]))
+    newsData['headline'] = newsData['headline'].apply(lambda x: " ".join(x.lower() for x in x.split()))
+    newsData['headline'] = newsData['headline'].apply(changingSpecialChar)
+    newsData['headline'] = newsData['headline'].apply(lambda x: " ".join([stemmer.stem(word) for word in x.split()]))
+    newsData['headline'] = newsData['headline'].apply(lambda x: " ".join([lemmatizer.lemmatize(word, pos="v") for word in x.split()]))
 
-    hist['summary'] = hist['summary'].apply(lambda x: " ".join(x.lower() for x in x.split()))
-    hist['summary'] = hist['summary'].apply(changingSpecialChar)
-    hist['summary'] = hist['summary'].apply(lambda x: " ".join([stemmer.stem(word) for word in x.split()]))
-    hist['summary'] = hist['summary'].apply(lambda x: " ".join([lemmatizer.lemmatize(word, pos="v") for word in x.split()]))
+    newsData['summary'] = newsData['summary'].apply(lambda x: " ".join(x.lower() for x in x.split()))
+    newsData['summary'] = newsData['summary'].apply(changingSpecialChar)
+    newsData['summary'] = newsData['summary'].apply(lambda x: " ".join([stemmer.stem(word) for word in x.split()]))
+    newsData['summary'] = newsData['summary'].apply(lambda x: " ".join([lemmatizer.lemmatize(word, pos="v") for word in x.split()]))
 
     file = open("metrics/negative-words.txt", 'r')
     neg_words = file.read().split()
@@ -46,23 +46,21 @@ def sentimentAnalysis(data: json, t_int: int = 50):
     file = open("metrics/positive-words.txt", 'r')
     pos_words = file.read().split()
     
-    hist['total_length'] = hist['summary'].apply(lambda x: len(re.findall(r'\w+', x))) + hist['headline'].apply(lambda x: len(re.findall(r'\w+', x)))
+    newsData['total_length'] = newsData['summary'].apply(lambda x: len(re.findall(r'\w+', x))) + newsData['headline'].apply(lambda x: len(re.findall(r'\w+', x)))
 
-    num_pos_head = hist['headline'].map(lambda x: len([i for i in x.split() if i in pos_words]))  # i = all the words in the head/sum string
-    num_pos_sum = hist['summary'].map(lambda x: len([i for i in x.split() if i in pos_words]))
-    hist['pos_count'] = num_pos_head + num_pos_sum
+    num_pos_head = newsData['headline'].map(lambda x: len([i for i in x.split() if i in pos_words]))  # i = all the words in the head/sum string
+    num_pos_sum = newsData['summary'].map(lambda x: len([i for i in x.split() if i in pos_words]))
+    newsData['pos_count'] = num_pos_head + num_pos_sum
 
-    num_neg_head = hist['headline'].map(lambda x: len([i for i in x.split() if i in neg_words]))
-    num_neg_sum = hist['summary'].map(lambda x: len([i for i in x.split() if i in neg_words]))
-    hist['neg_count'] = num_neg_head + num_neg_sum
+    num_neg_head = newsData['headline'].map(lambda x: len([i for i in x.split() if i in neg_words]))
+    num_neg_sum = newsData['summary'].map(lambda x: len([i for i in x.split() if i in neg_words]))
+    newsData['neg_count'] = num_neg_head + num_neg_sum
 
-    hist['sentiment'] = round((hist['pos_count'] - hist['neg_count']) / hist['total_length'], 3)
+    newsData['sentiment'] = round((newsData['pos_count'] - newsData['neg_count']) / newsData['total_length'], 3)
 
-    meanSentiment = round(hist['sentiment'].mean(), 3)
-    print("The mean sentiment of this ticker is :", meanSentiment)
+    meanSentiment = round(newsData['sentiment'].mean(), 3)
+    # print("The mean sentiment of this ticker is :", meanSentiment)
 
-    hist.to_csv("HistOutput") #remove later
+    # newsData.to_csv("newsDataOutput") #remove later
 
-    #rmb to write docstrings for your fs
-
-    return hist
+    return newsData, meanSentiment
