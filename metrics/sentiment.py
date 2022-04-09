@@ -8,6 +8,7 @@ import nltk
 from nltk.stem.wordnet import WordNetLemmatizer
 
 nltk.download('wordnet')
+nltk.download('omw-1.4')
 
 def changingSpecialChar(data):
     special_char = '@_!#$%^&*()<>?/\|}{~:;[]'
@@ -16,7 +17,7 @@ def changingSpecialChar(data):
     return ret
 
 
-def sentimentAnalysis(data: json, t_int: int = 10):
+def sentimentAnalysis(data: json, t_int: int = 50):
     """ 
     data: json input of News data (IEX).
     t_int: specified for amount of recent news
@@ -47,7 +48,7 @@ def sentimentAnalysis(data: json, t_int: int = 10):
     
     hist['total_length'] = hist['summary'].apply(lambda x: len(re.findall(r'\w+', x))) + hist['headline'].apply(lambda x: len(re.findall(r'\w+', x)))
 
-    num_pos_head = hist['headline'].map(lambda x: len([i for i in x.split() if i in pos_words]))
+    num_pos_head = hist['headline'].map(lambda x: len([i for i in x.split() if i in pos_words]))  # i = all the words in the head/sum string
     num_pos_sum = hist['summary'].map(lambda x: len([i for i in x.split() if i in pos_words]))
     hist['pos_count'] = num_pos_head + num_pos_sum
 
@@ -58,9 +59,9 @@ def sentimentAnalysis(data: json, t_int: int = 10):
     hist['sentiment'] = round((hist['pos_count'] - hist['neg_count']) / hist['total_length'], 3)
 
     meanSentiment = round(hist['sentiment'].mean(), 3)
-    print(meanSentiment)
+    print("The mean sentiment of this ticker is :", meanSentiment)
 
-    hist.to_csv("50output") #remove later
+    hist.to_csv("HistOutput") #remove later
 
     #rmb to write docstrings for your fs
 

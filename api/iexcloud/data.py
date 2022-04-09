@@ -65,7 +65,7 @@ def batch(symbols: list[str], types: list[str], range: str = None, params_ex: di
     r.raise_for_status()
     return r.json()
 
-def news(symbol: str, range: str, mode: str = "sandbox", ver: str = "stable"): #sandbox / cloud
+def news(symbol: str, range: str, mode: str = "cloud", ver: str = "stable"): #sandbox / cloud
     """ 
     symbol: Symbol of listed securities on NA exchanges.
     range: Desired range of data in calendar days.

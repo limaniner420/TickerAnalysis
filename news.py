@@ -4,17 +4,18 @@ import json
 from metrics import metrics, sentiment
 from api.iexcloud import data
 import re
+import sys
 
+ticker = sys.argv[1]
+number = sys.argv[2]
 
+# j = data.news(ticker, number)
 
-# j = data.news("AAPL", "50")
-
-# with open('Newsdata50.json', 'w') as f:
+# with open('NewsData50.json', 'w') as f:
 #     json.dump(j, f)
 
-with open('Newsdata50.json') as fp:
+with open('NewsData50.json') as fp:
     data = json.load(fp)
 
-news = sentiment.sentimentAnalysis(data)
+news = sentiment.sentimentAnalysis(data, number)
 
-#find out how many times a keyword is used (good vs bad) //count make a dictionary with keyword 
