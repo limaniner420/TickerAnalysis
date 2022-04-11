@@ -1,42 +1,44 @@
 import pandas as pd
-import numpy as np
-import json
-import statsmodels.nonparametric.smoothers_lowess as st_lowess
 
-def movAvgDiff(data: json, t_long: int = 200, t_short: int = 50, normalised: bool = True):
+def movingAverage(data: pd.DataFrame, t_long: int = 200, t_short: int = 50) -> pd.DataFrame:
     """ 
-    data: json input of historical price data (IEX).
-    t: time periods specified for comparison of moving avgs. t_long must be greater than t_short for valid data.
-    normalised:
-        true: returns fractional difference.
-        false: returns absolute difference.
-    returns difference in moving average.
+    data: pandas Dataframe containing historical price data. Requires columns "date", "close". 
+    t: Time periods used to calculate moving averages. T_long must be greater than t_short for valid data.
+    
+    Returns Dataframe containing fast and slow moving averages.
+
+    See: https://www.investopedia.com/terms/c/crossover.asp
     """
 
-    if t_long < 1 or t_short < 1 or t_long <= t_short:
-        return None
+    # TODO: validity check.
+    ma = pd.DataFrame()
+    ma["date"] = data["date"]
+    ma["ma_long"] = data["close"].rolling(window = t_long).mean()
+    ma["ma_short"] = data["close"].rolling(window = t_short).mean()
+    ma = ma.set_index("date").dropna()
+    return ma
 
-    hist = pd.json_normalize(data)
-    hist["date"] = pd.to_datetime(hist["date"])
-    hist_long_ma = np.mean(hist[-t_long:]["close"])
-    hist_short_ma = np.mean(hist[-t_short:]["close"])
-    return (hist_short_ma - hist_long_ma) / (hist_long_ma if normalised else 1)
-
-def meanRev(data: json, t_data: int = None, t_ma: int = 24):
+def fiboRetracement(data: pd.DataFrame, t: int = 365):
     """ 
-    data: json input of historical price data (IEX).
-    t_data: specify length of time for comparison.
-    t_ma: specify no. of data points used for lowess.
-    returns difference of current price to lowess regression.
-    """
+    data: pandas Dataframe containing historical price data. Requires column "close". 
+    t: Time periods used to calculate extremas.
+    
+    Returns Dataframe containing Fibonacci retracement levels.
 
-    if (t_data != None):
-        hist = data[-t_data:]
-    else:
-        hist = data
-        
-    hist = pd.json_normalize(data)
-    hist["date"] = pd.to_datetime(hist["date"])
-    hist_lowess = st_lowess.lowess(hist["close"], hist["date"], frac = t_ma / len(hist["date"]), is_sorted = True)
-    delta = (hist.iloc[-1]["close"] - hist_lowess[-1][1]) / hist_lowess[-1][1]
-    return delta
+    See: https://www.investopedia.com/articles/active-trading/091114/strategies-trading-fibonacci-retracements.asp
+    """
+    temp = data[["close"]][-t:]
+    fib = pd.DataFrame()
+
+    min = temp["close"].min()
+    max = temp["close"].max()
+    delta = max - min
+
+    fib["0%"] = min
+    fib["23.6%"] = 0.236 * delta + min
+    fib["38.2%"] = 0.382 * delta + min
+    fib["50.0%"] = 0.5 * delta + min
+    fib["61.8%"] = 0.618 * delta + min
+    fib["76.4%"] = 0.764 * delta + min
+    fib["100%"] = max
+    return fib
