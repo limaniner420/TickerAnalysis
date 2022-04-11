@@ -17,7 +17,7 @@ def quote(symbol: str, params_ex: dict[str] = None, mode: str = "sandbox", ver: 
     r.raise_for_status()
     return r.json()
 
-def hist_price(symbol: str, range: str, params_ex: dict[str] = None, mode: str = "sandbox", ver: str = "stable"):
+def hist_price(symbol: str, range: str = "1y", params_ex: dict[str] = None, mode: str = "sandbox", ver: str = "stable"):
     """ 
     symbol: Symbol of listed securities on NA exchanges.
     range: Desired range of data in calendar days.
