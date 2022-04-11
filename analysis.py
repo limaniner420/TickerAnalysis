@@ -60,9 +60,6 @@ else:
 
 
 
-plt.show()
-
-
 #Stochastic
 Stoc = metum.Stochastic(data)
 if(Stoc.iloc[-1]['K'] > 80 and Stoc.iloc[-1]['d'] > 80 and Stoc.iloc[-1]['d'] > Stoc.iloc[-1]['k']):
