@@ -66,7 +66,7 @@ def rsi(data: pd.DataFrame, t_periods: int = 14):
 
     rsi['RSI'] = 100 - (100/(1 + rs))
     rsi = rsi.set_index("date").dropna()
-    return rsi['RSI']
+    return rsi
 
 def volatility(data: pd.DataFrame):
     """"
