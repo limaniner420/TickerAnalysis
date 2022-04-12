@@ -5,24 +5,22 @@ import json
 import pandas as pd
 import re
 from datetime import datetime
+from metrics import sentiment
 import matplotlib.pyplot as plt
 
     
 word = input("Please input a stock symbol which you want to analysis :")
-
 try:
     file = pd.read_json("data.json")
     data = pd.DataFrame(file[word]['chart'])    
     weight = 0
-    k = api.news(word, "50")
-    with open('NewsData50.json', 'w') as f:
-        json.dump(k, f)
-    with open('NewsData50.json') as fp:
-        news = json.load(fp)
+    with open(word+'.json') as fp:
+         news_data = json.load(fp)
 except Exception as e:
     print("The stock data haven't fetched, please fetch first in the fetch.py")
     exit()
 price = data.iloc[-1]['close']
+
 
 #bolli
 bolli = metum.bollingerBands(data)
@@ -46,7 +44,6 @@ else:
     print("BBands score :",bo_val,"(sell)")
 
 
-
 #macd
 macd = metum.macd(data)
 delta = macd.iloc[-1]["delta"]
@@ -61,6 +58,8 @@ else:
     macd_val -= 1
     print("MACD score :",macd_val,"(sell)")
 
+
+
 #rsi
 rsi = metum.rsi(data)
 rsi_val = 0
@@ -73,6 +72,7 @@ elif( rsi.iloc[-1]['RSI'] < 30):
 else:
     rsi_val -= 1
     print("RSI score :",rsi_val,"(sell)")
+
 
 #Stochastic
 Stoc = metum.Stochastic(data)
@@ -87,11 +87,18 @@ else:
     stoc_val = 0
     print("KD score :",stoc_val,"(hold)")
 
-
-#news
+#sentiment
+news,number2 = sentiment.sentimentAnalysis(news_data, '50')
+news_val = 0
+if(number2 >= 0):
+    news_val += 1
+    print("Sentiment score :",news_val,"(buy)")
+else:
+    news_val -= 1
+    print("Sentiment score :",news_val,"(sell)")
 
 #Grade
-weight = (bo_val + macd_val + rsi_val + stoc_val)/5 
+weight = (bo_val + macd_val + rsi_val + stoc_val+ news_val)/5 
 
 #graphing 
 fig, (price, Rsi,kd) = plt.subplots(3)
@@ -120,5 +127,6 @@ elif(weight > 0):
 else:
     print("Overall rating :",weight, "(sell)\n  " )
     print("After different analysis, you might consider to sell it")
+
 
 plt.show()
