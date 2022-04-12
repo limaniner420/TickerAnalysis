@@ -1,7 +1,6 @@
 import api.iexcloud.data as api
 import metrics.metrics as met
 import metrics.momentum as metum
-import metrics.regression as reg
 import json
 import pandas as pd
 import re
@@ -15,58 +14,84 @@ try:
     file = pd.read_json("data.json")
     data = pd.DataFrame(file[word]['chart'])    
     weight = 0
+    k = api.news(word, "50")
+    with open('NewsData50.json', 'w') as f:
+        json.dump(k, f)
+    with open('NewsData50.json') as fp:
+        news = json.load(fp)
 except Exception as e:
-    print("the stock data haven't fetched, please fetch first in the fetch.py")
+    print("The stock data haven't fetched, please fetch first in the fetch.py")
     exit()
-
 price = data.iloc[-1]['close']
 
 #bolli
 bolli = metum.bollingerBands(data)
 d2 = bolli.iloc[-1]
+bo_val = 0
+
 if(price >= d2["+2sd"]):
-    weight += 1
+    bo_val += 1
+    print("BBands score :",bo_val,"(buy)")
 elif (price >= d2["+1sd"]):
-    weight += 0.5
+    bo_val += 0.5
+    print("BBands score :",bo_val,"(buy)")
 elif (price >= d2["-1sd"]):
-    weight += 0
+    bo_val += 0
+    print("BBands score :",bo_val,"(hold)")
 elif (price >= d2["+1sd"]):
-    weight -= 0.5
+    bo_val -= 0.1
+    print("BBands score :",bo_val,"(sell)")
 else:
-    weight -= 1
+    bo_val -= 0.5
+    print("BBands score :",bo_val,"(sell)")
+
 
 
 #macd
 macd = metum.macd(data)
-mval = macd.iloc[-1]["MACD"]
-if(mval == 0):
-    weight += 0
-elif(mval > 0 ):
-    weight += 0.5
+delta = macd.iloc[-1]["delta"]
+macd_val = 0
+if(abs(delta) <= 0.05):
+    macd_val += 0
+    print("MACD score :",macd_val,"(hold)")
+elif(delta > 0 ):
+    macd_val += 1
+    print("MACD score :",macd_val,"(buy)")
 else:
-    weight -= 0.5
-
-print(macd)
+    macd_val -= 1
+    print("MACD score :",macd_val,"(sell)")
 
 #rsi
 rsi = metum.rsi(data)
-mean = rsi['RSI'].rolling(len(rsi)).mean().iloc[-1]
-if(rsi.iloc[-1]['RSI'] == mean or (rsi.iloc[-1]['RSI']>= 30 and rsi.iloc[-1]['RSI'] <= 70)):
-    weight += 0
-elif(rsi.iloc[-1]['RSI'] <= mean or rsi.iloc[-1]['RSI'] < 30):
-    weight += 0.5
+rsi_val = 0
+if(rsi.iloc[-1]['RSI']>= 30 and rsi.iloc[-1]['RSI'] <= 70):
+    rsi_val += 0
+    print("RSI score :",rsi_val,"(hold)")
+elif( rsi.iloc[-1]['RSI'] < 30):
+    rsi_val += 1
+    print("RSI score :",rsi_val,"(buy)")
 else:
-    weight -= 0.5
-
-
+    rsi_val -= 1
+    print("RSI score :",rsi_val,"(sell)")
 
 #Stochastic
 Stoc = metum.Stochastic(data)
-if(Stoc.iloc[-1]['K'] > 80 and Stoc.iloc[-1]['d'] > 80 and Stoc.iloc[-1]['d'] > Stoc.iloc[-1]['k']):
-    weight -= 1
-elif(Stoc.iloc[-1]['K'] < 20 and Stoc.iloc[-1]['d'] < 20 and Stoc.iloc[-1]['k'] > Stoc.iloc[-1]['d']):
-    weight += 1
+stoc_val = 0
+if(Stoc.iloc[-1]['K'] > 80 and Stoc.iloc[-1]['D'] > 80 and Stoc.iloc[-1]['D'] > Stoc.iloc[-1]['D']):
+    stoc_val -= 1
+    print("KD score :",stoc_val,"(sell)")
+elif(Stoc.iloc[-1]['K'] < 20 and Stoc.iloc[-1]['D'] < 20 and Stoc.iloc[-1]['K'] > Stoc.iloc[-1]['D']):
+    stoc_val += 1
+    print("KD score :",stoc_val,"(buy)")
+else:
+    stoc_val = 0
+    print("KD score :",stoc_val,"(hold)")
 
+
+#news
+
+#Grade
+weight = (bo_val + macd_val + rsi_val + stoc_val)/5 
 
 #graphing 
 fig, (price, Rsi,kd) = plt.subplots(3)
@@ -84,11 +109,16 @@ Stoc[['K', 'D']].plot(ax=kd)
 kd.set_ylim(0,100)
 kd.axhline(20, linestyle='--', color="r")
 kd.axhline(80, linestyle="--", color="r")
+kd.set_ylabel('Stochastic oscillator')
 
-    
-if(weight > 0):
-    print("After different analysis, it is a good timing to buy this stock if you are considering when to buy it")
+if(abs(weight) <= 0.1):
+    print("Overall rating :",weight, "(hold)\n " )
+    print("After different analysis, you might consider to hold it")
+elif(weight > 0):
+    print("Overall rating :",weight, "(buy)\n  " )
+    print("After different analysis, you might consider to buy it")
 else:
-    print("After different analysis, it is not a good timing to buy this stock, you might consider to sell or hold it")
+    print("Overall rating :",weight, "(sell)\n  " )
+    print("After different analysis, you might consider to sell it")
 
 plt.show()
