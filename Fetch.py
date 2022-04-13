@@ -14,9 +14,13 @@ word=  word.split(",")
 time = input("Plase input the time range: ")
 
 try:
-    j = api.batch(word,["chart","news"],time)
+    j = api.batch(word,["chart"],time,mode = "cloud")
     with open('data.json', 'w') as f:
      json.dump(j, f)
+    for x in word:
+        k = api.news(x, "20")
+        with open( x + '.json', 'w') as f:
+            json.dump(k, f)        
 except Exception as e:
     print(e)
 
