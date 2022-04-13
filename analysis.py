@@ -14,13 +14,12 @@ try:
     file = pd.read_json("data.json")
     data = pd.DataFrame(file[word]['chart'])    
     weight = 0
-    with open(word+'.json') as fp:
-         news_data = json.load(fp)
+    news_data = pd.DataFrame(file[word]['news'])  
 except Exception as e:
     print("The stock data haven't fetched, please fetch first in the fetch.py")
     exit()
 price = data.iloc[-1]['close']
-
+# print(data)
 
 #bolli
 bolli = metum.bollingerBands(data)
@@ -29,20 +28,20 @@ bo_val = 0
 
 if(price >= d2["+2sd"]):
     bo_val += 1
-    print("BBands score :",bo_val,"(buy)")
+    print("\nBBands score :",bo_val,"(buy)")
 elif (price >= d2["+1sd"]):
     bo_val += 0.5
-    print("BBands score :",bo_val,"(buy)")
+    print("\nBBands score :",bo_val,"(buy)")
 elif (price >= d2["-1sd"]):
     bo_val += 0
-    print("BBands score :",bo_val,"(hold)")
+    print("\nBBands score :",bo_val,"(hold)")
 elif (price >= d2["+1sd"]):
     bo_val -= 0.1
-    print("BBands score :",bo_val,"(sell)")
+    print("\nBBands score :",bo_val,"(sell)")
 else:
     bo_val -= 0.5
-    print("BBands score :",bo_val,"(sell)")
-
+    print("\nBBands score :",bo_val,"(sell)")
+# print(d2)
 
 #macd
 macd = metum.macd(data)
@@ -57,7 +56,7 @@ elif(delta > 0 ):
 else:
     macd_val -= 1
     print("MACD score :",macd_val,"(sell)")
-
+# print(macd.iloc[-1])
 
 
 #rsi
@@ -72,7 +71,7 @@ elif( rsi.iloc[-1]['RSI'] < 30):
 else:
     rsi_val -= 1
     print("RSI score :",rsi_val,"(sell)")
-
+# print(rsi.iloc[-1])
 
 #Stochastic
 Stoc = metum.Stochastic(data)
@@ -86,9 +85,10 @@ elif(Stoc.iloc[-1]['K'] < 20 and Stoc.iloc[-1]['D'] < 20 and Stoc.iloc[-1]['K'] 
 else:
     stoc_val = 0
     print("KD score :",stoc_val,"(hold)")
+# print(Stoc.iloc[-1])
 
 #sentiment
-news,number2 = sentiment.sentimentAnalysis(news_data, '50')
+news,number2 = sentiment.sentimentAnalysis(news_data, '10')
 news_val = 0
 if(number2 >= 0):
     news_val += 1
@@ -96,6 +96,7 @@ if(number2 >= 0):
 else:
     news_val -= 1
     print("Sentiment score :",news_val,"(sell)")
+
 
 #Grade
 weight = (bo_val + macd_val + rsi_val + stoc_val+ news_val)/5 
@@ -119,14 +120,11 @@ kd.axhline(80, linestyle="--", color="r")
 kd.set_ylabel('Stochastic oscillator')
 
 if(abs(weight) <= 0.1):
-    print("Overall rating :",weight, "(hold)\n " )
-    print("After different analysis, you might consider to hold it")
+    print("\nOverall rating :",weight, "(hold)" )
 elif(weight > 0):
-    print("Overall rating :",weight, "(buy)\n  " )
-    print("After different analysis, you might consider to buy it")
+    print("\nOverall rating :",weight, "(buy)" )
 else:
-    print("Overall rating :",weight, "(sell)\n  " )
-    print("After different analysis, you might consider to sell it")
+    print("\nOverall rating :",weight, "(sell)" )
 
 
 plt.show()
