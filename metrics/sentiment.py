@@ -17,7 +17,7 @@ def changingSpecialChar(data):
     return ret
 
 
-def sentimentAnalysis(data: json, t_int: int = 50):
+def sentimentAnalysis(data: pd.DataFrame, t_int: int = 50):
     """ 
     Uses intraday news data provided by iexcloud to provide a sentiment analysis on the specified stock ticker
     data: json input of News data (IEX).
@@ -25,7 +25,8 @@ def sentimentAnalysis(data: json, t_int: int = 50):
     Ruturns an overall sentiment score by averaging all the articles.
     """
 
-    newsData = pd.json_normalize(data)
+    # newsData = pd.json_normalize(data)
+    newsData = data
     stemmer = PorterStemmer()
     lemmatizer = WordNetLemmatizer()
     newsData = newsData.drop(columns=['datetime', 'source', 'url', 'lang', 'hasPaywall', 'related', 'image'])
@@ -57,10 +58,11 @@ def sentimentAnalysis(data: json, t_int: int = 50):
     newsData['neg_count'] = num_neg_head + num_neg_sum
 
     newsData['sentiment'] = round((newsData['pos_count'] - newsData['neg_count']) / newsData['total_length'], 3)
+    #print(newsData['pos_count'].count(),newsData['neg_count'].count())
 
     meanSentiment = round(newsData['sentiment'].mean(), 3)
     # print("The mean sentiment of this ticker is :", meanSentiment)
 
-    # newsData.to_csv("newsDataOutput") #remove later
+    #newsData.to_csv("newsDataOutput") #remove later
 
     return newsData, meanSentiment
