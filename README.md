@@ -18,7 +18,7 @@ To query the IEXCloud API for data, an IEXCloud account and their API tokens are
 
 # Usage
 
-Unpack files into any directory you wish. It will be referred here forth as "the directory".
+Unpack files into any directory you wish. It will be referred forward as "the directory".
 
 ## Fetching Data
 
