@@ -12,11 +12,29 @@ NumPy 1.22.3
 
 Requests 2.27.1
 
+nltk 3.7
+
 To query the IEXCloud API for data, an IEXCloud account and their API tokens are also required. Rename config_template.cfg and copy-paste the keys into their corresponding fields to enable this functionality.
 
 # Usage
 
-//Pending completion of driver programs.
+Unpack files into any directory you wish. It will be referred here forth as "the directory".
+
+## Fetching Data
+
+  In the directory, use command `python Fetch.py` to fetch data required from IEX Cloud. Follow the prompts as shown.
+  
+  If the API returns a valid object, the program will exit without any output, and a new file "data.json" is saved in the directory.
+  
+  Otherwise, the program will raise an exception and the error is outputted to the console.
+  
+## Analysing the Data
+
+  In the directory, use command `python analysis.py` to analyse the stock desired. Follow the prompts as shown.
+  
+  If the corresponding data does not exist in data.json, the console will ask you to fetch the data required first, and exits.
+  
+  If the program ran successfully, the resulting scores from each indicator, as well as the aggregated score, will be outputted to the console, with their corresponding recommended course of action. No new files are produced.
 
 # Legalese
 
