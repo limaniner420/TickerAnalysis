@@ -4,7 +4,7 @@ This software attempts to provide a buy/sell recommendation of a particular stoc
 
 # Setup
 
-Ensure the following packages are installed:
+Ensure the following packages are installed. Versions shown are the minimum versions that have confirmed to be working in an Windows environment.
 
 Pandas 1.4.1
 
@@ -22,7 +22,7 @@ Unpack files into any directory you wish. It will be referred here forth as "the
 
 ## Fetching Data
 
-  In the directory, use command `python Fetch.py` to fetch data required from IEX Cloud. Follow the prompts as shown.
+  In the directory, use command `python .\Fetch.py` to fetch data required from IEX Cloud. Follow the prompts as shown.
   
   If the API returns a valid object, the program will exit without any output, and a new file "data.json" is saved in the directory.
   
@@ -30,11 +30,11 @@ Unpack files into any directory you wish. It will be referred here forth as "the
   
 ## Analysing the Data
 
-  In the directory, use command `python analysis.py` to analyse the stock desired. Follow the prompts as shown.
+  In the directory, use command `python .\analysis.py` to analyse the stock desired. Follow the prompts as shown.
   
   If the corresponding data does not exist in data.json, the console will ask you to fetch the data required first, and exits.
   
-  If the program ran successfully, the resulting scores from each indicator, as well as the aggregated score, will be outputted to the console, with their corresponding recommended course of action. No new files are produced.
+  If the program ran successfully, the resulting scores from each indicator, as well as the aggregated score, will be outputted to the console, with their corresponding recommended course of action. A graph will also be produced, showing the historical price, RSI and stochastic oscillator levels. No new files are produced.
 
 # Legalese
 
