@@ -22,7 +22,7 @@ Unpack files into any directory you wish. It will be referred forward as "the di
 
 ## Fetching Data
 
-  Set the API token by renaming `config_template.cfg` to `config.cfg`, and replace the field `token_IEX_prod` with a valid token from IEX Cloud. Note that it must be a non-sandbox mode token for the program to properly function.
+  Set the API token by renaming `config_template.cfg` to `config.cfg`, and replace the field `token_IEX_prod` with a valid token from IEX Cloud. Note that it must be a non-sandbox mode token for the program to properly function. We have provided a fresh config.cfg with a temperary token to be used to the marking of this project.
 
   In the directory, use command `python .\Fetch.py` to fetch data required from IEX Cloud. Follow the prompts as shown.
 
