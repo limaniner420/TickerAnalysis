@@ -53,4 +53,4 @@ Copyright 2022 Eric Chen, Shao-en Hung Lawrence and Jun Pin Foo.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Footnote
-This project will also act as the final project of Spring 2022 CMPT353 D100, Class of Dr. Steven Bergner at SFU for Eric Chen, Shao-en Hung Lawrence and Jun Pin Foo. 
+This project will also act as the final project of Spring 2022 CMPT353 D100, Class of Dr. Steven Bergner at Simon Fraser University for Eric Chen, Shao-en Hung Lawrence and Jun Pin Foo. 
