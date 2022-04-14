@@ -22,9 +22,13 @@ Unpack files into any directory you wish. It will be referred forward as "the di
 
 ## Fetching Data
 
-  Set the API token by renaming `config_template.cfg` to `config.cfg`, and replace the field `token_IEX_prod` with a valid token from IEX Cloud. Note that it must be a non-sandbox mode token for the program to properly function.
+  Set the API token by renaming `config_template.cfg` to `config.cfg`, and replace the field `token_IEX_prod` with a valid token from IEX Cloud. Note that it must be a non-sandbox mode token for the program to properly function. We have provided a fresh token for temporary use [Marking of the project].
 
   In the directory, use command `python .\Fetch.py` to fetch data required from IEX Cloud. Follow the prompts as shown.
+
+  You will be prompt with the message "Please input a list stock symbol, if there are multiple, please seperate it with comma: ". Enter all the stocks you would like to fetch, example `AAPL, ABNB`.
+
+  Next enter a time frame that you would like to get for the specified stocks in the range of [1m to 6m], m meaning months. Example, `1m`
   
   If the API returns a valid object, the program will exit without any output, and a new file "data.json" is saved in the directory.
   
@@ -34,7 +38,7 @@ Unpack files into any directory you wish. It will be referred forward as "the di
 
   In the directory, use command `python .\analysis.py` to analyse the stock desired. Follow the prompts as shown.
   
-  If the corresponding data does not exist in data.json, the console will ask you to fetch the data required first, and exits.
+  If the corresponding data does not exist in data.json, the console will ask you to fetch the data required first, and exits. From the above fetched symbols, we are allowed to call either `AAPL` or `ABNB`.
   
   If the program ran successfully, the resulting scores from each indicator, as well as the aggregated score, will be outputted to the console, with their corresponding recommended course of action. A graph will also be produced, showing the historical price, RSI and stochastic oscillator levels. No new files are produced.
 

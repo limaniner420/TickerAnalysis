@@ -63,6 +63,6 @@ def sentimentAnalysis(data: pd.DataFrame, t_int: int = 50):
     meanSentiment = round(newsData['sentiment'].mean(), 3)
     # print("The mean sentiment of this ticker is :", meanSentiment)
 
-    #newsData.to_csv("newsDataOutput") #remove later
+    # newsData.to_csv("newsDataOutput") #to get output of sentiment analysis 
 
     return newsData, meanSentiment

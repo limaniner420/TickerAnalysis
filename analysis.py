@@ -103,6 +103,7 @@ weight = (bo_val + macd_val + rsi_val + stoc_val+ news_val)/5
 
 #graphing 
 fig, (price, Rsi,kd) = plt.subplots(3)
+fig.set_size_inches(18.5, 10.5)
 fig.suptitle(word)
 price_data = data[['date','close']]
 price_data = price_data.set_index("date").dropna()
