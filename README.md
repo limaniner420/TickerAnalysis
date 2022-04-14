@@ -22,6 +22,8 @@ Unpack files into any directory you wish. It will be referred here forth as "the
 
 ## Fetching Data
 
+  Set the API token by renaming `config_template.cfg` to `config.cfg`, and replace the field `token_IEX_prod` with a valid token from IEX Cloud. Note that it must be a non-sandbox mode token for the program to properly function.
+
   In the directory, use command `python .\Fetch.py` to fetch data required from IEX Cloud. Follow the prompts as shown.
   
   If the API returns a valid object, the program will exit without any output, and a new file "data.json" is saved in the directory.
